@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ficha de ingreso — Monkey D Market</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: 'Inter', Arial, sans-serif;
+    background: #efe9df; color: #2b2420; min-height: 100vh;
+    display: flex; align-items: flex-start; justify-content: center;
+  }
+  .phone {
+    max-width: 520px; width: 100%; min-height: 100vh;
+    background: #fbf9f5; box-shadow: 0 0 60px rgba(0,0,0,0.08);
+    position: relative;
+  }
+  .hero {
+    padding: 30px 26px 20px;
+    background: linear-gradient(180deg, rgba(0,20,20,0.10) 0%, rgba(0,16,18,0.85) 100%),
+      radial-gradient(120% 100% at 15% 0%, #ffb703 0%, #e07a1f 55%, #5c2e0a 100%);
+    color: #fff;
+  }
+  .hero-eyebrow { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; opacity: 0.75; margin: 0 0 6px; }
+  .hero-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 600; margin: 0; line-height: 1.15; }
+  .hero-sub { font-size: 13px; opacity: 0.85; margin-top: 8px; line-height: 1.5; }
+
+  .content { padding: 26px 26px 50px; }
+  .section-label {
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    color: #e07a1f; font-weight: 600; margin: 26px 0 12px;
+  }
+  .section-label:first-child { margin-top: 0; }
+  label { display: block; font-size: 12px; color: #8a7a68; margin: 12px 0 5px; font-weight: 500; }
+  input, select {
+    width: 100%; padding: 11px 12px; border: 1px solid #e3dbcb; border-radius: 8px;
+    background: #fff; font-size: 14px; color: #2b2420; font-family: inherit;
+  }
+  input:focus, select:focus { outline: none; border-color: #e07a1f; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .row-tel { display: grid; grid-template-columns: 90px 1fr; gap: 8px; }
+  .field-err { font-size: 11px; color: #c0392b; margin-top: 3px; min-height: 14px; }
+  #btn {
+    width: 100%; margin-top: 28px; padding: 15px; border: none; border-radius: 10px;
+    background: #1D252C; color: #fff; font-size: 15px; font-weight: 700; cursor: pointer;
+    font-family: inherit;
+  }
+  #btn:disabled { opacity: 0.6; cursor: default; }
+  .msg { text-align: center; font-size: 13px; margin-top: 12px; min-height: 18px; }
+  .msg.err { color: #c0392b; }
+  .success2 { text-align: center; padding: 50px 26px; }
+  .icon2 { width: 56px; height: 56px; border-radius: 50%; background: #e07a1f; color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 18px; }
+  .success2 h2 { font-family: 'Playfair Display', serif; font-size: 22px; margin: 0 0 6px; color: #1D252C; }
+  .sub2 { color: #8a7a68; font-size: 13.5px; margin: 0; }
+</style>
+</head>
+<body>
+<div class="phone" id="card">
+  <div class="hero">
+    <div class="hero-eyebrow">Monkey D Market · Recursos Humanos</div>
+    <div class="hero-title">Ficha de ingreso</div>
+    <div class="hero-sub">Completa tus datos personales para iniciar tu proceso de contratación. Una vez enviado, el equipo revisará tu ficha y coordinará los términos de tu contrato contigo.</div>
+  </div>
+  <div class="content">
+    <form id="form">
+      <div class="section-label">Datos personales</div>
+      <div class="row2">
+        <div>
+          <label>Nombre</label>
+          <input type="text" id="nombre" required>
+        </div>
+        <div>
+          <label>Apellido(s)</label>
+          <input type="text" id="apellido" required>
+        </div>
+      </div>
+      <label>RUT</label>
+      <input type="text" id="rut" placeholder="12.345.678-9" required>
+      <div class="field-err" id="errRut"></div>
+      <div class="row2">
+        <div>
+          <label>Nacionalidad</label>
+          <input type="text" id="nacionalidad" value="Chilena">
+        </div>
+        <div>
+          <label>Fecha de nacimiento</label>
+          <input type="date" id="fechaNacimiento" required>
+        </div>
+      </div>
+      <label>Estado civil</label>
+      <select id="estadoCivil">
+        <option value="soltero/a">Soltero/a</option>
+        <option value="casado/a">Casado/a</option>
+        <option value="conviviente civil">Conviviente civil</option>
+        <option value="divorciado/a">Divorciado/a</option>
+        <option value="viudo/a">Viudo/a</option>
+      </select>
+
+      <div class="section-label">Domicilio</div>
+      <div class="row2">
+        <div>
+          <label>Calle</label>
+          <input type="text" id="domicilioCalle" required>
+        </div>
+        <div>
+          <label>Número</label>
+          <input type="text" id="domicilioNum" required>
+        </div>
+      </div>
+      <div class="row2">
+        <div>
+          <label>Comuna</label>
+          <input type="text" id="domicilioComuna" required>
+        </div>
+        <div>
+          <label>Ciudad</label>
+          <input type="text" id="domicilioCiudad" value="Santiago">
+        </div>
+      </div>
+
+      <div class="section-label">Contacto</div>
+      <label>Correo electrónico</label>
+      <input type="email" id="email" required>
+      <div class="field-err" id="errCorreo"></div>
+      <label>Teléfono</label>
+      <div class="row-tel">
+        <select id="codPais">
+          <option value="+56">🇨🇱 +56</option>
+        </select>
+        <input type="tel" id="telefono" placeholder="9 1234 5678" required>
+      </div>
+      <div class="field-err" id="errTelefono"></div>
+
+      <div class="section-label">Datos previsionales y bancarios</div>
+      <label>AFP</label>
+      <select id="afp">
+        <option value="">-- Selecciona --</option>
+        <option>Capital</option><option>Cuprum</option><option>Habitat</option><option>Modelo</option><option>PlanVital</option><option>ProVida</option><option>Uno</option>
+      </select>
+      <label>Sistema de salud</label>
+      <select id="salud">
+        <option value="fonasa">Fonasa</option>
+        <option value="isapre">Isapre</option>
+      </select>
+      <div id="wrapPlanUF" style="display:none;">
+        <label>Plan Isapre (en UF)</label>
+        <input type="number" id="planUF" step="0.1">
+      </div>
+      <div class="row2">
+        <div>
+          <label>Banco</label>
+          <input type="text" id="banco">
+        </div>
+        <div>
+          <label>Tipo de cuenta</label>
+          <select id="tipoCuenta">
+            <option value="Cuenta Corriente">Cuenta Corriente</option>
+            <option value="Cuenta Vista">Cuenta Vista</option>
+            <option value="Cuenta RUT">Cuenta RUT</option>
+            <option value="Cuenta de Ahorro">Cuenta de Ahorro</option>
+          </select>
+        </div>
+      </div>
+      <label>Número de cuenta</label>
+      <input type="text" id="numeroCuenta">
+
+      <button type="submit" id="btn">Enviar ficha</button>
+      <div class="msg" id="msg"></div>
+    </form>
+  </div>
+</div>
+
+<script>
+const NEGOCIO = 'monkey';
+
+function formatearRut(valor) {
+  let limpio = valor.replace(/[^0-9kK]/g, '').toUpperCase();
+  if (limpio.length === 0) return '';
+  let dv = limpio.slice(-1);
+  let cuerpo = limpio.slice(0, -1);
+  if (cuerpo.length === 0) return dv;
+  let cuerpoFormateado = '';
+  for (let i = 0; i < cuerpo.length; i++) {
+    const posDesdeElFinal = cuerpo.length - i;
+    cuerpoFormateado += cuerpo[i];
+    if (posDesdeElFinal > 1 && posDesdeElFinal % 3 === 1) cuerpoFormateado += '.';
+  }
+  return cuerpoFormateado + '-' + dv;
+}
+function rutValido(valor) {
+  const limpio = valor.replace(/[^0-9kK]/g, '').toUpperCase();
+  if (limpio.length < 2) return false;
+  const dv = limpio.slice(-1);
+  const cuerpo = limpio.slice(0, -1);
+  if (!/^\d+$/.test(cuerpo)) return false;
+  let suma = 0, multiplo = 2;
+  for (let i = cuerpo.length - 1; i >= 0; i--) {
+    suma += parseInt(cuerpo[i], 10) * multiplo;
+    multiplo = multiplo === 7 ? 2 : multiplo + 1;
+  }
+  const resto = 11 - (suma % 11);
+  let dvEsperado = resto === 11 ? '0' : resto === 10 ? 'K' : String(resto);
+  return dv === dvEsperado;
+}
+function correoValido(valor) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(valor.trim());
+}
+
+const rutInput = document.getElementById('rut');
+rutInput.addEventListener('input', function() {
+  const cursorAlFinal = this.selectionStart === this.value.length;
+  this.value = formatearRut(this.value);
+  if (cursorAlFinal) this.setSelectionRange(this.value.length, this.value.length);
+});
+rutInput.addEventListener('blur', function() {
+  document.getElementById('errRut').textContent = (this.value && !rutValido(this.value)) ? 'RUT inválido, revisa el dígito verificador' : '';
+});
+
+const telInput = document.getElementById('telefono');
+telInput.addEventListener('input', function() { this.value = this.value.replace(/[^0-9]/g, ''); });
+telInput.addEventListener('blur', function() {
+  document.getElementById('errTelefono').textContent = (this.value && this.value.length < 8) ? 'Teléfono incompleto' : '';
+});
+
+document.getElementById('email').addEventListener('blur', function() {
+  document.getElementById('errCorreo').textContent = (this.value && !correoValido(this.value)) ? 'Ingresa un correo válido' : '';
+});
+
+document.getElementById('salud').addEventListener('change', function() {
+  document.getElementById('wrapPlanUF').style.display = this.value === 'isapre' ? 'block' : 'none';
+});
+
+document.getElementById('form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('btn');
+  const msg = document.getElementById('msg');
+  msg.textContent = '';
+  msg.className = 'msg';
+
+  const rut = document.getElementById('rut').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const telefono = document.getElementById('telefono').value.trim();
+
+  let valido = true;
+  if (!rutValido(rut)) { document.getElementById('errRut').textContent = 'RUT inválido, revisa el dígito verificador'; valido = false; }
+  if (!correoValido(email)) { document.getElementById('errCorreo').textContent = 'Ingresa un correo válido'; valido = false; }
+  if (telefono.length < 8) { document.getElementById('errTelefono').textContent = 'Teléfono incompleto'; valido = false; }
+  if (!valido) {
+    msg.textContent = 'Revisa los datos marcados en rojo.';
+    msg.className = 'msg err';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Enviando...';
+
+  const codPais = document.getElementById('codPais').value;
+  const body = {
+    negocio: NEGOCIO,
+    nombre: document.getElementById('nombre').value.trim(),
+    apellido: document.getElementById('apellido').value.trim(),
+    rut: rut,
+    nacionalidad: document.getElementById('nacionalidad').value.trim() || null,
+    fecha_nacimiento: document.getElementById('fechaNacimiento').value || null,
+    estado_civil: document.getElementById('estadoCivil').value,
+    domicilio_calle: document.getElementById('domicilioCalle').value.trim(),
+    domicilio_num: document.getElementById('domicilioNum').value.trim(),
+    domicilio_comuna: document.getElementById('domicilioComuna').value.trim(),
+    domicilio_ciudad: document.getElementById('domicilioCiudad').value.trim() || null,
+    email: email.toLowerCase(),
+    telefono: codPais.replace('+','') + telefono,
+    afp: document.getElementById('afp').value || null,
+    sistema_salud: document.getElementById('salud').value,
+    plan_isapre_uf: document.getElementById('planUF').value ? parseFloat(document.getElementById('planUF').value) : null,
+    banco: document.getElementById('banco').value.trim() || null,
+    tipo_cuenta: document.getElementById('tipoCuenta').value,
+    numero_cuenta: document.getElementById('numeroCuenta').value.trim() || null,
+    estado: 'pendiente_contrato'
+  };
+
+  try {
+    const resp = await fetch('https://mis-negocios-n8n.u7xiga.easypanel.host/webhook/nuevo-trabajador-rrhh', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    if (!data.ok) throw new Error(data.error || 'error desconocido');
+
+    document.getElementById('card').innerHTML = `
+      <div class="success2">
+        <div class="icon2">&#10003;</div>
+        <h2>¡Ficha enviada!</h2>
+        <p class="sub2">Gracias, ${body.nombre}. Recibimos tus datos correctamente.<br><br>El equipo revisará tu información y se pondrá en contacto contigo para coordinar los términos de tu contrato.</p>
+      </div>`;
+  } catch (err) {
+    msg.textContent = 'Hubo un problema al enviar tu ficha. Intenta de nuevo.';
+    msg.className = 'msg err';
+    btn.disabled = false;
+    btn.textContent = 'Enviar ficha';
+  }
+});
+</script>
+</body>
+</html>
