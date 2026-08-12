@@ -71,12 +71,12 @@
       <div class="section-label">Datos personales</div>
       <div class="row2">
         <div>
-          <label>Nombre</label>
-          <input type="text" id="nombre" required>
+          <label>Nombre(s) completo(s)</label>
+          <input type="text" id="nombre" placeholder="Ej: Juan Pablo" required>
         </div>
         <div>
-          <label>Apellido(s)</label>
-          <input type="text" id="apellido" required>
+          <label>Apellido(s) completo(s)</label>
+          <input type="text" id="apellido" placeholder="Ej: Pérez González" required>
         </div>
       </div>
       <label>RUT</label>
@@ -156,7 +156,25 @@
       <div class="row2">
         <div>
           <label>Banco</label>
-          <input type="text" id="banco">
+          <select id="banco">
+            <option value="">-- Selecciona --</option>
+            <option>Banco Estado</option>
+            <option>Banco de Chile</option>
+            <option>Banco Santander</option>
+            <option>Banco BCI</option>
+            <option>Banco Itaú</option>
+            <option>Banco Scotiabank</option>
+            <option>Banco Falabella</option>
+            <option>Banco Security</option>
+            <option>Banco Consorcio</option>
+            <option>Banco Ripley</option>
+            <option>Banco BICE</option>
+            <option>Banco Internacional</option>
+            <option>Coopeuch</option>
+            <option>Tenpo</option>
+            <option>Mercado Pago</option>
+            <option>Otro</option>
+          </select>
         </div>
         <div>
           <label>Tipo de cuenta</label>
@@ -303,7 +321,9 @@ document.getElementById('form').addEventListener('submit', async function(e) {
         <p class="sub2">Gracias, ${body.nombre}. Recibimos tus datos correctamente.<br><br>El equipo revisará tu información y se pondrá en contacto contigo para coordinar los términos de tu contrato.</p>
       </div>`;
   } catch (err) {
-    msg.textContent = 'Hubo un problema al enviar tu ficha. Intenta de nuevo.';
+    msg.textContent = err.message && err.message !== 'error desconocido'
+      ? 'No se pudo enviar: ' + err.message
+      : 'Hubo un problema al enviar tu ficha. Intenta de nuevo.';
     msg.className = 'msg err';
     btn.disabled = false;
     btn.textContent = 'Enviar ficha';
