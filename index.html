@@ -115,13 +115,91 @@
       <div class="row2">
         <div>
           <label>Comuna</label>
-          <input type="text" id="domicilioComuna" required>
+          <select id="domicilioComuna">
+            <option value="">-- Selecciona --</option>
+            <option>Santiago</option>
+            <option>Providencia</option>
+            <option>Las Condes</option>
+            <option>Ñuñoa</option>
+            <option>La Reina</option>
+            <option>Vitacura</option>
+            <option>Macul</option>
+            <option>Peñalolén</option>
+            <option>La Florida</option>
+            <option>Puente Alto</option>
+            <option>San Miguel</option>
+            <option>San Joaquín</option>
+            <option>Independencia</option>
+            <option>Recoleta</option>
+            <option>Quinta Normal</option>
+            <option>Estación Central</option>
+            <option>Cerrillos</option>
+            <option>Maipú</option>
+            <option>Pudahuel</option>
+            <option>Renca</option>
+            <option>Quilicura</option>
+            <option>Conchalí</option>
+            <option>Huechuraba</option>
+            <option>Lo Barnechea</option>
+            <option>La Cisterna</option>
+            <option>El Bosque</option>
+            <option>La Granja</option>
+            <option>Lo Espejo</option>
+            <option>Pedro Aguirre Cerda</option>
+            <option>San Ramón</option>
+            <option>La Pintana</option>
+            <option>San Bernardo</option>
+            <option value="otra">Otra…</option>
+          </select>
+          <input type="text" id="domicilioComunaOtra" placeholder="Escribe tu comuna" style="display:none;margin-top:8px;">
         </div>
         <div>
-          <label>Ciudad</label>
-          <input type="text" id="domicilioCiudad" value="Santiago">
+          <label>Región</label>
+          <select id="domicilioRegion">
+            <option>Región de Arica y Parinacota</option>
+            <option>Región de Tarapacá</option>
+            <option>Región de Antofagasta</option>
+            <option>Región de Atacama</option>
+            <option>Región de Coquimbo</option>
+            <option>Región de Valparaíso</option>
+            <option selected>Región Metropolitana de Santiago</option>
+            <option>Región del Libertador General Bernardo O'Higgins</option>
+            <option>Región del Maule</option>
+            <option>Región de Ñuble</option>
+            <option>Región del Biobío</option>
+            <option>Región de La Araucanía</option>
+            <option>Región de Los Ríos</option>
+            <option>Región de Los Lagos</option>
+            <option>Región de Aysén</option>
+            <option>Región de Magallanes y la Antártica Chilena</option>
+          </select>
         </div>
       </div>
+      <label>Ciudad</label>
+      <select id="domicilioCiudad">
+        <option selected>Santiago</option>
+        <option>Valparaíso</option>
+        <option>Viña del Mar</option>
+        <option>Concepción</option>
+        <option>La Serena</option>
+        <option>Coquimbo</option>
+        <option>Antofagasta</option>
+        <option>Temuco</option>
+        <option>Rancagua</option>
+        <option>Talca</option>
+        <option>Arica</option>
+        <option>Chillán</option>
+        <option>Iquique</option>
+        <option>Puerto Montt</option>
+        <option>Copiapó</option>
+        <option>Osorno</option>
+        <option>Valdivia</option>
+        <option>Punta Arenas</option>
+        <option>Calama</option>
+        <option>Curicó</option>
+        <option value="otra">Otra…</option>
+      </select>
+      <input type="text" id="domicilioCiudadOtra" placeholder="Escribe tu ciudad" style="display:none;margin-top:8px;">
       <label>Depto / Block (opcional)</label>
       <input type="text" id="domicilioDepto" placeholder="Ej. Depto 302, Block C">
 
@@ -255,6 +333,18 @@ document.getElementById('salud').addEventListener('change', function() {
   document.getElementById('wrapPlanUF').style.display = this.value === 'isapre' ? 'block' : 'none';
 });
 
+document.getElementById('domicilioComuna').addEventListener('change', function() {
+  document.getElementById('domicilioComunaOtra').style.display = this.value === 'otra' ? 'block' : 'none';
+});
+document.getElementById('domicilioCiudad').addEventListener('change', function() {
+  document.getElementById('domicilioCiudadOtra').style.display = this.value === 'otra' ? 'block' : 'none';
+});
+function valorConOtra(idSelect, idOtra) {
+  const sel = document.getElementById(idSelect).value;
+  if (sel === 'otra') return document.getElementById(idOtra).value.trim();
+  return sel;
+}
+
 document.getElementById('form').addEventListener('submit', async function(e) {
   e.preventDefault();
   const btn = document.getElementById('btn');
@@ -290,8 +380,9 @@ document.getElementById('form').addEventListener('submit', async function(e) {
     estado_civil: document.getElementById('estadoCivil').value,
     domicilio_calle: document.getElementById('domicilioCalle').value.trim(),
     domicilio_num: document.getElementById('domicilioNum').value.trim(),
-    domicilio_comuna: document.getElementById('domicilioComuna').value.trim(),
-    domicilio_ciudad: document.getElementById('domicilioCiudad').value.trim() || null,
+    domicilio_comuna: valorConOtra('domicilioComuna', 'domicilioComunaOtra'),
+    domicilio_ciudad: valorConOtra('domicilioCiudad', 'domicilioCiudadOtra') || null,
+    domicilio_region: document.getElementById('domicilioRegion').value || null,
     domicilio_depto: document.getElementById('domicilioDepto').value.trim() || null,
     email: email.toLowerCase(),
     telefono: codPais.replace('+','') + telefono,
