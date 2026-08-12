@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Completar contrato — Monkey D Market</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: 'Inter', Arial, sans-serif;
+    background: #efe9df; color: #2b2420; min-height: 100vh;
+    display: flex; align-items: flex-start; justify-content: center;
+  }
+  .phone {
+    max-width: 640px; width: 100%; min-height: 100vh;
+    background: #fbf9f5; box-shadow: 0 0 60px rgba(0,0,0,0.08);
+    position: relative;
+  }
+  .hero {
+    padding: 30px 26px 20px;
+    background: linear-gradient(180deg, rgba(20,14,0,0.10) 0%, rgba(18,12,0,0.85) 100%),
+      radial-gradient(120% 100% at 15% 0%, #ffb703 0%, #e07a1f 55%, #5c2e0a 100%);
+    color: #fff;
+  }
+  .hero-eyebrow { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; opacity: 0.75; margin: 0 0 6px; }
+  .hero-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 600; margin: 0; line-height: 1.15; }
+  .hero-sub { font-size: 13px; opacity: 0.85; margin-top: 8px; line-height: 1.5; }
+
+  .content { padding: 26px 26px 50px; }
+  .section-label {
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    color: #e07a1f; font-weight: 600; margin: 26px 0 12px;
+  }
+  .section-label:first-child { margin-top: 0; }
+  label { display: block; font-size: 12px; color: #8a7a68; margin: 12px 0 5px; font-weight: 500; }
+  input, select {
+    width: 100%; padding: 11px 12px; border: 1px solid #e3dbcb; border-radius: 8px;
+    background: #fff; font-size: 14px; color: #2b2420; font-family: inherit;
+  }
+  input:focus, select:focus { outline: none; border-color: #e07a1f; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .btn {
+    width: 100%; margin-top: 22px; padding: 15px; border: none; border-radius: 10px;
+    background: #1D252C; color: #fff; font-size: 15px; font-weight: 700; cursor: pointer;
+    font-family: inherit;
+  }
+  .btn:disabled { opacity: 0.6; cursor: default; }
+  .btn-secundario {
+    width: 100%; margin-top: 10px; padding: 13px; border: 1px solid #e0453c; border-radius: 10px;
+    background: #fff; color: #c0392b; font-size: 13.5px; font-weight: 700; cursor: pointer;
+    font-family: inherit;
+  }
+  .btn-link { background: none; border: none; color: #e07a1f; font-size: 12.5px; font-weight: 600; cursor: pointer; padding: 0; font-family: inherit; }
+  .msg { text-align: center; font-size: 13px; margin-top: 12px; min-height: 18px; }
+  .msg.err { color: #c0392b; }
+  .msg.ok { color: #0f8a4c; }
+  .success2 { text-align: center; padding: 50px 26px; }
+  .icon2 { width: 56px; height: 56px; border-radius: 50%; background: #e07a1f; color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 18px; }
+  .success2 h2 { font-family: 'Playfair Display', serif; font-size: 22px; margin: 0 0 6px; color: #1D252C; }
+  .sub2 { color: #8a7a68; font-size: 13.5px; margin: 0; }
+
+  .card-pend {
+    border: 1px solid #e3dbcb; border-radius: 10px; padding: 14px 16px; margin-bottom: 10px;
+    background: #fff; cursor: pointer; transition: border-color .15s;
+  }
+  .card-pend:hover { border-color: #e07a1f; }
+  .card-pend .nom { font-weight: 700; font-size: 14.5px; color: #1D252C; }
+  .card-pend .det { font-size: 12px; color: #8a7a68; margin-top: 3px; }
+  .vacio { text-align: center; color: #8a7a68; font-size: 13px; padding: 30px 10px; }
+
+  .contexto {
+    background: #fff7e8; border: 1px solid #ffe1ad; border-radius: 8px; padding: 12px 14px;
+    font-size: 12.5px; margin-bottom: 6px; color: #5c3d10;
+  }
+  .contexto b { color: #1D252C; }
+
+  table.turno { width: 100%; font-size: 11px; border-collapse: collapse; margin-top: 8px; }
+  table.turno th { padding: 4px; font-weight: 600; color: #8a7a68; }
+  table.turno td { padding: 3px; text-align: center; }
+  table.turno input[type=text] { width: 54px; font-size: 11px; padding: 4px; text-align: center; }
+  .nota-turno { font-size: 10.5px; color: #8a7a68; margin-top: 6px; }
+
+  #gate { padding: 30px 26px; }
+  #gate label { margin-top: 16px; }
+  .gate-err { color: #c0392b; font-size: 12.5px; margin-top: 10px; display: none; text-align: center; }
+</style>
+</head>
+<body>
+<div class="phone" id="card">
+  <div class="hero">
+    <div class="hero-eyebrow">Monkey D Market · Recursos Humanos</div>
+    <div class="hero-title">Completar contrato</div>
+    <div class="hero-sub">Acceso solo para administración. Elige a la persona pendiente y completa los términos del contrato: cargo, horario, sueldo y tipo de contrato.</div>
+  </div>
+
+  <div id="gate" class="content">
+    <div class="section-label">Iniciar sesión</div>
+    <label>Correo</label>
+    <input type="email" id="gateEmail" autocomplete="username">
+    <label>Contraseña</label>
+    <input type="password" id="gatePass" autocomplete="current-password">
+    <button class="btn" id="gateBtn">Entrar</button>
+    <div class="gate-err" id="gateErr"></div>
+  </div>
+
+  <div class="content" id="listaWrap" style="display:none;">
+    <div class="section-label">Pendientes de contrato</div>
+    <div id="listaPendientes"></div>
+    <button class="btn-link" id="btnRecargarLista" style="margin-top:8px;">↻ Actualizar lista</button>
+  </div>
+
+  <div class="content" id="formWrap" style="display:none;">
+    <button class="btn-link" id="btnVolverLista">← Volver a la lista</button>
+    <div class="contexto" id="contexto" style="margin-top:14px;"></div>
+
+    <div class="section-label">Términos del contrato</div>
+    <label>Cargo</label>
+    <select id="cCargo">
+      <option value="operario_monkey">Operario Multifuncional</option>
+      <option value="otro">Otro</option>
+    </select>
+    <div class="row2">
+      <div>
+        <label>Horas semanales</label>
+        <select id="cHoras">
+          <option value="42">42 hrs — $539.000</option>
+          <option value="30" selected>30 hrs — $385.000</option>
+          <option value="20">20 hrs — $256.667</option>
+        </select>
+      </div>
+      <div>
+        <label>Sueldo base</label>
+        <input type="number" id="cSueldo" value="385000">
+      </div>
+    </div>
+    <div class="row2">
+      <div>
+        <label>Fecha de inicio</label>
+        <input type="date" id="cFechaInicio">
+      </div>
+      <div>
+        <label>Tipo de contrato</label>
+        <select id="cTipoContrato">
+          <option value="indefinido">Indefinido</option>
+          <option value="plazo_fijo">Plazo fijo</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="section-label">Horario semanal</div>
+    <div id="turnoGrid"></div>
+    <div class="nota-turno">Deja "Inicio/Fin colación" vacío si ese día no tiene turno partido.</div>
+
+    <button class="btn" id="btnEnviarContrato">Enviar contrato</button>
+    <button class="btn-secundario" id="btnCancelarFicha">Cancelar esta ficha</button>
+    <div class="msg" id="formMsg"></div>
+  </div>
+</div>
+
+<script>
+const NEGOCIO = 'monkey';
+const SUPABASE_URL = "https://udsvumfwczyormmprizm.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVkc3Z1bWZ3Y3p5b3JtbXByaXptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MTg1MzgsImV4cCI6MjA5NTM5NDUzOH0.h3MzXhUrIkwssCCwWSohg9l40weroZUP81NJ3PLIAxE";
+const PENDIENTES_URL = "https://mis-negocios-n8n.u7xiga.easypanel.host/webhook/pendientes-contrato-rrhh";
+const COMPLETAR_URL = "https://mis-negocios-n8n.u7xiga.easypanel.host/webhook/completar-contrato-rrhh";
+const RRHH_SUELDOS = { 42: 539000, 30: 385000, 20: 256667 };
+const DIAS_C = ["Lun","Mar","Mie","Jue","Vie","Sab","Dom"];
+
+let SESION = null;
+let PENDIENTE_ACTUAL = null;
+
+async function cargarPerfil(userId, accessToken) {
+  const res = await fetch(SUPABASE_URL + "/rest/v1/perfiles_dashboard?id=eq." + userId + "&select=*", {
+    headers: { apikey: SUPABASE_ANON_KEY, Authorization: "Bearer " + accessToken }
+  });
+  const rows = await res.json();
+  return rows[0] || null;
+}
+
+async function entrarConSesion(session) {
+  const perfil = await cargarPerfil(session.user.id, session.access_token);
+  if (!perfil) {
+    document.getElementById("gateErr").textContent = "Tu cuenta no tiene perfil asignado en el dashboard.";
+    document.getElementById("gateErr").style.display = "block";
+    return;
+  }
+  SESION = { access_token: session.access_token, refresh_token: session.refresh_token, perfil };
+  document.getElementById("gate").style.display = "none";
+  document.getElementById("listaWrap").style.display = "block";
+  cargarPendientes();
+}
+
+const sesionGuardada = JSON.parse(sessionStorage.getItem("ct_sesion") || "null");
+if (sesionGuardada) {
+  fetch(SUPABASE_URL + "/auth/v1/user", { headers: { apikey: SUPABASE_ANON_KEY, Authorization: "Bearer " + sesionGuardada.access_token } })
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(user => entrarConSesion({ access_token: sesionGuardada.access_token, refresh_token: sesionGuardada.refresh_token, user }))
+    .catch(() => { sessionStorage.removeItem("ct_sesion"); });
+}
+
+async function intentarEntrar() {
+  const email = document.getElementById("gateEmail").value.trim();
+  const pass = document.getElementById("gatePass").value;
+  const btn = document.getElementById("gateBtn");
+  document.getElementById("gateErr").style.display = "none";
+  btn.textContent = "Ingresando…";
+  btn.disabled = true;
+  try {
+    const res = await fetch(SUPABASE_URL + "/auth/v1/token?grant_type=password", {
+      method: "POST",
+      headers: { apikey: SUPABASE_ANON_KEY, "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password: pass })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error_description || data.msg || "Error de acceso");
+    sessionStorage.setItem("ct_sesion", JSON.stringify({ access_token: data.access_token, refresh_token: data.refresh_token }));
+    await entrarConSesion({ access_token: data.access_token, refresh_token: data.refresh_token, user: data.user });
+  } catch (e) {
+    document.getElementById("gateErr").textContent = "Correo o contraseña incorrectos.";
+    document.getElementById("gateErr").style.display = "block";
+  }
+  btn.textContent = "Entrar";
+  btn.disabled = false;
+}
+document.getElementById("gateBtn").addEventListener("click", intentarEntrar);
+document.getElementById("gatePass").addEventListener("keydown", (e) => { if (e.key === "Enter") intentarEntrar(); });
+document.getElementById("gateEmail").addEventListener("keydown", (e) => { if (e.key === "Enter") intentarEntrar(); });
+
+async function cargarPendientes() {
+  const lista = document.getElementById("listaPendientes");
+  lista.innerHTML = '<div class="vacio">Cargando…</div>';
+  try {
+    const res = await fetch(PENDIENTES_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ negocio: NEGOCIO, access_token: SESION.access_token })
+    });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || "error");
+    if (!data.pendientes.length) {
+      lista.innerHTML = '<div class="vacio">No hay fichas pendientes de contrato en este momento.</div>';
+      return;
+    }
+    lista.innerHTML = "";
+    data.pendientes.forEach(p => {
+      const div = document.createElement("div");
+      div.className = "card-pend";
+      div.innerHTML = `<div class="nom">${p.nombre} ${p.apellido}</div>
+        <div class="det">RUT ${p.rut || "—"} · ${p.domicilio_comuna || "sin comuna"}</div>`;
+      div.addEventListener("click", () => abrirFormulario(p));
+      lista.appendChild(div);
+    });
+  } catch (e) {
+    lista.innerHTML = '<div class="vacio">No se pudo cargar la lista. Intenta de nuevo.</div>';
+  }
+}
+document.getElementById("btnRecargarLista").addEventListener("click", cargarPendientes);
+
+function renderTurnoGrid() {
+  const wrap = document.getElementById("turnoGrid");
+  wrap.innerHTML = '<table class="turno"><tr><th></th>' + DIAS_C.map(d=>`<th>${d}</th>`).join('') + '</tr>' +
+    '<tr><td>Activo</td>' + DIAS_C.map((_,i)=>`<td><input type="checkbox" class="tOn" data-i="${i}"></td>`).join('') + '</tr>' +
+    '<tr><td>Entrada</td>' + DIAS_C.map((_,i)=>`<td><input type="text" class="tE" data-i="${i}" placeholder="09:00"></td>`).join('') + '</tr>' +
+    '<tr><td>Inicio col.</td>' + DIAS_C.map((_,i)=>`<td><input type="text" class="tColIni" data-i="${i}" placeholder="12:00"></td>`).join('') + '</tr>' +
+    '<tr><td>Fin col.</td>' + DIAS_C.map((_,i)=>`<td><input type="text" class="tColFin" data-i="${i}" placeholder="13:00"></td>`).join('') + '</tr>' +
+    '<tr><td>Salida</td>' + DIAS_C.map((_,i)=>`<td><input type="text" class="tS" data-i="${i}" placeholder="18:00"></td>`).join('') + '</tr></table>';
+}
+
+function abrirFormulario(p) {
+  PENDIENTE_ACTUAL = p;
+  document.getElementById("listaWrap").style.display = "none";
+  document.getElementById("formWrap").style.display = "block";
+  document.getElementById("formMsg").textContent = "";
+  document.getElementById("contexto").innerHTML =
+    `Completando contrato de <b>${p.nombre} ${p.apellido}</b><br>RUT ${p.rut || "—"} · ${p.email || "sin correo"} · ${p.telefono ? "+"+p.telefono : "sin teléfono"}`;
+  document.getElementById("cFechaInicio").value = "";
+  renderTurnoGrid();
+}
+document.getElementById("btnVolverLista").addEventListener("click", () => {
+  document.getElementById("formWrap").style.display = "none";
+  document.getElementById("listaWrap").style.display = "block";
+  cargarPendientes();
+});
+
+document.getElementById("cHoras").addEventListener("change", (e) => {
+  document.getElementById("cSueldo").value = RRHH_SUELDOS[e.target.value] || "";
+});
+
+document.getElementById("btnEnviarContrato").addEventListener("click", async () => {
+  const msg = document.getElementById("formMsg");
+  msg.className = "msg";
+  const fechaInicio = document.getElementById("cFechaInicio").value;
+  if (!fechaInicio) { msg.textContent = "Falta la fecha de inicio."; msg.className = "msg err"; return; }
+
+  const turno = [];
+  for (let i = 0; i < 7; i++) {
+    turno.push({
+      on: document.querySelector(`.tOn[data-i="${i}"]`).checked,
+      e: document.querySelector(`.tE[data-i="${i}"]`).value,
+      s: document.querySelector(`.tS[data-i="${i}"]`).value,
+      colIni: document.querySelector(`.tColIni[data-i="${i}"]`).value,
+      colFin: document.querySelector(`.tColFin[data-i="${i}"]`).value
+    });
+  }
+
+  const btn = document.getElementById("btnEnviarContrato");
+  btn.disabled = true;
+  btn.textContent = "Enviando...";
+  try {
+    const res = await fetch(COMPLETAR_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: PENDIENTE_ACTUAL.id,
+        access_token: SESION.access_token,
+        cargo: document.getElementById("cCargo").value,
+        horas_semanales: parseInt(document.getElementById("cHoras").value, 10),
+        sueldo_base: parseInt(document.getElementById("cSueldo").value, 10) || null,
+        fecha_inicio: fechaInicio,
+        tipo_contrato: document.getElementById("cTipoContrato").value,
+        turno
+      })
+    });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || "error");
+    document.getElementById("card").innerHTML = `
+      <div class="success2">
+        <div class="icon2">&#10003;</div>
+        <h2>¡Contrato enviado!</h2>
+        <p class="sub2">Se envió el resumen por WhatsApp para redactar el contrato de ${PENDIENTE_ACTUAL.nombre} ${PENDIENTE_ACTUAL.apellido}.</p>
+      </div>`;
+  } catch (e) {
+    msg.textContent = "No se pudo enviar. Intenta de nuevo.";
+    msg.className = "msg err";
+    btn.disabled = false;
+    btn.textContent = "Enviar contrato";
+  }
+});
+
+document.getElementById("btnCancelarFicha").addEventListener("click", async () => {
+  if (!confirm(`¿Cancelar la ficha de ${PENDIENTE_ACTUAL.nombre} ${PENDIENTE_ACTUAL.apellido}? Esto la descarta y no se generará contrato.`)) return;
+  const btn = document.getElementById("btnCancelarFicha");
+  btn.disabled = true;
+  btn.textContent = "Cancelando...";
+  try {
+    const res = await fetch(COMPLETAR_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: PENDIENTE_ACTUAL.id, access_token: SESION.access_token, accion: "cancelar" })
+    });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || "error");
+    document.getElementById("formWrap").style.display = "none";
+    document.getElementById("listaWrap").style.display = "block";
+    cargarPendientes();
+  } catch (e) {
+    alert("No se pudo cancelar. Intenta de nuevo.");
+  }
+  btn.disabled = false;
+  btn.textContent = "Cancelar esta ficha";
+});
+</script>
+</body>
+</html>
