@@ -312,7 +312,7 @@ function abrirFormulario(p) {
   document.getElementById("formWrap").style.display = "block";
   document.getElementById("formMsg").textContent = "";
   const domicilio = [p.domicilio_calle, p.domicilio_num, p.domicilio_depto].filter(Boolean).join(" ") +
-    (p.domicilio_comuna ? (", " + p.domicilio_comuna) : "") + (p.domicilio_ciudad ? (", " + p.domicilio_ciudad) : "");
+    (p.domicilio_comuna ? (", " + p.domicilio_comuna) : "") + (p.domicilio_ciudad ? (", " + p.domicilio_ciudad) : "") + (p.domicilio_region ? (", " + p.domicilio_region) : "");
   document.getElementById("contexto").innerHTML =
     `<b>Completando contrato de ${p.nombre} ${p.apellido}</b><br>
      RUT ${p.rut || "—"} · ${p.email || "sin correo"} · ${p.telefono ? "+"+p.telefono : "sin teléfono"}<br>
