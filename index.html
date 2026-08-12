@@ -122,6 +122,8 @@
           <input type="text" id="domicilioCiudad" value="Santiago">
         </div>
       </div>
+      <label>Depto / Block (opcional)</label>
+      <input type="text" id="domicilioDepto" placeholder="Ej. Depto 302, Block C">
 
       <div class="section-label">Contacto</div>
       <label>Correo electrónico</label>
@@ -272,6 +274,7 @@ document.getElementById('form').addEventListener('submit', async function(e) {
     domicilio_num: document.getElementById('domicilioNum').value.trim(),
     domicilio_comuna: document.getElementById('domicilioComuna').value.trim(),
     domicilio_ciudad: document.getElementById('domicilioCiudad').value.trim() || null,
+    domicilio_depto: document.getElementById('domicilioDepto').value.trim() || null,
     email: email.toLowerCase(),
     telefono: codPais.replace('+','') + telefono,
     afp: document.getElementById('afp').value || null,
