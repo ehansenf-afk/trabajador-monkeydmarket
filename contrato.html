@@ -154,6 +154,23 @@
         </select>
       </div>
     </div>
+    <div id="wrapDuracionMeses" style="display:none;">
+      <label>Duración del plazo fijo</label>
+      <select id="cDuracionMeses">
+        <option value="1">1 mes</option>
+        <option value="2">2 meses</option>
+        <option value="3" selected>3 meses</option>
+        <option value="4">4 meses</option>
+        <option value="5">5 meses</option>
+        <option value="6">6 meses</option>
+        <option value="7">7 meses</option>
+        <option value="8">8 meses</option>
+        <option value="9">9 meses</option>
+        <option value="10">10 meses</option>
+        <option value="11">11 meses</option>
+        <option value="12">12 meses</option>
+      </select>
+    </div>
 
     <div class="section-label">Horario semanal</div>
     <div id="turnoGrid"></div>
@@ -340,6 +357,9 @@ document.getElementById("cSueldo").addEventListener("input", (e) => {
     if (v) SUELDO_BASE_42 = v;
   }
 });
+document.getElementById("cTipoContrato").addEventListener("change", (e) => {
+  document.getElementById("wrapDuracionMeses").style.display = e.target.value === "plazo_fijo" ? "block" : "none";
+});
 
 document.getElementById("btnEnviarContrato").addEventListener("click", async () => {
   const msg = document.getElementById("formMsg");
@@ -373,6 +393,7 @@ document.getElementById("btnEnviarContrato").addEventListener("click", async () 
         sueldo_base: parseInt(document.getElementById("cSueldo").value, 10) || null,
         fecha_inicio: fechaInicio,
         tipo_contrato: document.getElementById("cTipoContrato").value,
+        duracion_meses: document.getElementById("cTipoContrato").value === "plazo_fijo" ? parseInt(document.getElementById("cDuracionMeses").value, 10) : null,
         turno
       })
     });
