@@ -130,16 +130,17 @@
       <div>
         <label>Horas semanales</label>
         <select id="cHoras">
-          <option value="42">42 hrs — $539.000</option>
-          <option value="30" selected>30 hrs — $385.000</option>
-          <option value="20">20 hrs — $256.667</option>
+          <option value="42" selected>42 hrs (jornada completa)</option>
+          <option value="30">30 hrs</option>
+          <option value="20">20 hrs</option>
         </select>
       </div>
       <div>
         <label>Sueldo base</label>
-        <input type="number" id="cSueldo" value="385000">
+        <input type="number" id="cSueldo" value="539000">
       </div>
     </div>
+    <div class="nota-turno" style="margin-top:-6px;margin-bottom:14px;">El sueldo se ingresa para 42 hrs (jornada completa). Si cambias las horas, se recalcula proporcionalmente — puedes editarlo igual a mano.</div>
     <div class="row2">
       <div>
         <label>Fecha de inicio</label>
@@ -170,11 +171,11 @@ const SUPABASE_URL = "https://udsvumfwczyormmprizm.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVkc3Z1bWZ3Y3p5b3JtbXByaXptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MTg1MzgsImV4cCI6MjA5NTM5NDUzOH0.h3MzXhUrIkwssCCwWSohg9l40weroZUP81NJ3PLIAxE";
 const PENDIENTES_URL = "https://mis-negocios-n8n.u7xiga.easypanel.host/webhook/pendientes-contrato-rrhh";
 const COMPLETAR_URL = "https://mis-negocios-n8n.u7xiga.easypanel.host/webhook/completar-contrato-rrhh";
-const RRHH_SUELDOS = { 42: 539000, 30: 385000, 20: 256667 };
 const DIAS_C = ["Lun","Mar","Mie","Jue","Vie","Sab","Dom"];
 
 let SESION = null;
 let PENDIENTE_ACTUAL = null;
+let SUELDO_BASE_42 = 539000; // sueldo de jornada completa; se prorratea para 30/20 hrs
 
 async function cargarPerfil(userId, accessToken) {
   const res = await fetch(SUPABASE_URL + "/rest/v1/perfiles_dashboard?id=eq." + userId + "&select=*", {
@@ -330,7 +331,14 @@ document.getElementById("btnVolverLista").addEventListener("click", () => {
 });
 
 document.getElementById("cHoras").addEventListener("change", (e) => {
-  document.getElementById("cSueldo").value = RRHH_SUELDOS[e.target.value] || "";
+  const horas = parseInt(e.target.value, 10);
+  document.getElementById("cSueldo").value = Math.round(SUELDO_BASE_42 / 42 * horas);
+});
+document.getElementById("cSueldo").addEventListener("input", (e) => {
+  if (document.getElementById("cHoras").value === "42") {
+    const v = parseInt(e.target.value, 10);
+    if (v) SUELDO_BASE_42 = v;
+  }
 });
 
 document.getElementById("btnEnviarContrato").addEventListener("click", async () => {
