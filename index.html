@@ -118,10 +118,11 @@
       <select id="domicilioRegion" required></select>
       <label>Ciudad</label>
       <select id="domicilioCiudad" required></select>
-      <input type="text" id="domicilioCiudadOtra" placeholder="Escribe tu ciudad" style="display:none;margin-top:8px;" required>
+      <input type="text" id="domicilioCiudadOtra" placeholder="Escribe tu ciudad" style="display:none;margin-top:8px;">
       <label>Comuna</label>
       <select id="domicilioComuna" required></select>
-      <input type="text" id="domicilioComunaOtra" placeholder="Escribe tu comuna" style="display:none;margin-top:8px;" required>
+      <input type="text" id="domicilioComunaOtra" placeholder="Escribe tu comuna" style="display:none;margin-top:8px;">
+      <div class="field-err" id="errDomicilio"></div>
 
       <div class="section-label">Contacto</div>
       <label>Correo electrónico</label>
@@ -349,6 +350,22 @@ document.getElementById('form').addEventListener('submit', async function(e) {
   if (!valido) {
     msg.textContent = 'Revisa los datos marcados en rojo.';
     msg.className = 'msg err';
+    return;
+  }
+
+  const regionVal = document.getElementById('domicilioRegion').value;
+  const ciudadVal = document.getElementById('domicilioCiudad').value;
+  const ciudadOtraVal = document.getElementById('domicilioCiudadOtra').value.trim();
+  const comunaVal = document.getElementById('domicilioComuna').value;
+  const comunaOtraVal = document.getElementById('domicilioComunaOtra').value.trim();
+  document.getElementById('errDomicilio').textContent = '';
+  let domicilioValido = true;
+  if (!regionVal) { domicilioValido = false; }
+  if (!ciudadVal || (ciudadVal === 'otra' && !ciudadOtraVal)) { domicilioValido = false; }
+  if (!comunaVal || (comunaVal === 'otra' && !comunaOtraVal)) { domicilioValido = false; }
+  if (!domicilioValido) {
+    document.getElementById('errDomicilio').textContent = 'Completa región, ciudad y comuna (elige "Otra" y escribe si no aparece en la lista).';
+    document.getElementById('domicilioComuna').scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
   }
 
