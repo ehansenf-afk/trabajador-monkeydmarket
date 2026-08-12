@@ -188,6 +188,14 @@
       <label>Número de cuenta</label>
       <input type="text" id="numeroCuenta">
 
+      <div class="section-label">Documentos (opcional, puedes subirlos después)</div>
+      <label>Certificado AFP (PDF o foto)</label>
+      <input type="file" id="fileAfp" accept="application/pdf,image/*">
+      <label>Certificado Fonasa / Isapre (PDF o foto)</label>
+      <input type="file" id="fileSalud" accept="application/pdf,image/*">
+      <label>Certificado de antecedentes (PDF o foto)</label>
+      <input type="file" id="fileAntecedentes" accept="application/pdf,image/*">
+
       <button type="submit" id="btn">Enviar ficha</button>
       <div class="msg" id="msg"></div>
     </form>
@@ -326,6 +334,20 @@ document.getElementById('domicilioComuna').addEventListener('change', function()
 poblarRegiones();
 poblarCiudades(false);
 
+
+async function subirCertificado(file, prefijo) {
+  if (!file) return null;
+  const nombreArchivo = "certificados/" + prefijo + "-" + Date.now() + "-" + file.name.replace(/[^a-zA-Z0-9._-]/g, "");
+  try {
+    const up = await fetch(SUPABASE_URL + "/storage/v1/object/documentos-rrhh/" + nombreArchivo, {
+      method: "POST",
+      headers: { apikey: SUPABASE_ANON_KEY, Authorization: "Bearer " + SUPABASE_ANON_KEY, "Content-Type": file.type || "application/octet-stream" },
+      body: file
+    });
+    if (up.ok) return SUPABASE_URL + "/storage/v1/object/public/documentos-rrhh/" + nombreArchivo;
+  } catch (e) {}
+  return null;
+}
 function valorConOtra(idSelect, idOtra) {
   const sel = document.getElementById(idSelect).value;
   if (sel === 'otra') return document.getElementById(idOtra).value.trim();
@@ -397,6 +419,15 @@ document.getElementById('form').addEventListener('submit', async function(e) {
     numero_cuenta: document.getElementById('numeroCuenta').value.trim() || null,
     estado: 'pendiente_contrato'
   };
+
+  const [certAfpUrl, certSaludUrl, certAntecedentesUrl] = await Promise.all([
+    subirCertificado(document.getElementById('fileAfp').files[0], 'afp'),
+    subirCertificado(document.getElementById('fileSalud').files[0], 'salud'),
+    subirCertificado(document.getElementById('fileAntecedentes').files[0], 'antecedentes')
+  ]);
+  body.certificado_afp_url = certAfpUrl;
+  body.certificado_salud_url = certSaludUrl;
+  body.certificado_antecedentes_url = certAntecedentesUrl;
 
   try {
     const resp = await fetch('https://mis-negocios-n8n.u7xiga.easypanel.host/webhook/nuevo-trabajador-rrhh', {
