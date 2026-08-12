@@ -112,94 +112,14 @@
           <input type="text" id="domicilioNum" required>
         </div>
       </div>
-      <div class="row2">
-        <div>
-          <label>Comuna</label>
-          <select id="domicilioComuna">
-            <option value="">-- Selecciona --</option>
-            <option>Santiago</option>
-            <option>Providencia</option>
-            <option>Las Condes</option>
-            <option>Ñuñoa</option>
-            <option>La Reina</option>
-            <option>Vitacura</option>
-            <option>Macul</option>
-            <option>Peñalolén</option>
-            <option>La Florida</option>
-            <option>Puente Alto</option>
-            <option>San Miguel</option>
-            <option>San Joaquín</option>
-            <option>Independencia</option>
-            <option>Recoleta</option>
-            <option>Quinta Normal</option>
-            <option>Estación Central</option>
-            <option>Cerrillos</option>
-            <option>Maipú</option>
-            <option>Pudahuel</option>
-            <option>Renca</option>
-            <option>Quilicura</option>
-            <option>Conchalí</option>
-            <option>Huechuraba</option>
-            <option>Lo Barnechea</option>
-            <option>La Cisterna</option>
-            <option>El Bosque</option>
-            <option>La Granja</option>
-            <option>Lo Espejo</option>
-            <option>Pedro Aguirre Cerda</option>
-            <option>San Ramón</option>
-            <option>La Pintana</option>
-            <option>San Bernardo</option>
-            <option value="otra">Otra…</option>
-          </select>
-          <input type="text" id="domicilioComunaOtra" placeholder="Escribe tu comuna" style="display:none;margin-top:8px;">
-        </div>
-        <div>
-          <label>Región</label>
-          <select id="domicilioRegion">
-            <option>Región de Arica y Parinacota</option>
-            <option>Región de Tarapacá</option>
-            <option>Región de Antofagasta</option>
-            <option>Región de Atacama</option>
-            <option>Región de Coquimbo</option>
-            <option>Región de Valparaíso</option>
-            <option selected>Región Metropolitana de Santiago</option>
-            <option>Región del Libertador General Bernardo O'Higgins</option>
-            <option>Región del Maule</option>
-            <option>Región de Ñuble</option>
-            <option>Región del Biobío</option>
-            <option>Región de La Araucanía</option>
-            <option>Región de Los Ríos</option>
-            <option>Región de Los Lagos</option>
-            <option>Región de Aysén</option>
-            <option>Región de Magallanes y la Antártica Chilena</option>
-          </select>
-        </div>
-      </div>
+      <label>Región</label>
+      <select id="domicilioRegion" required></select>
       <label>Ciudad</label>
-      <select id="domicilioCiudad">
-        <option selected>Santiago</option>
-        <option>Valparaíso</option>
-        <option>Viña del Mar</option>
-        <option>Concepción</option>
-        <option>La Serena</option>
-        <option>Coquimbo</option>
-        <option>Antofagasta</option>
-        <option>Temuco</option>
-        <option>Rancagua</option>
-        <option>Talca</option>
-        <option>Arica</option>
-        <option>Chillán</option>
-        <option>Iquique</option>
-        <option>Puerto Montt</option>
-        <option>Copiapó</option>
-        <option>Osorno</option>
-        <option>Valdivia</option>
-        <option>Punta Arenas</option>
-        <option>Calama</option>
-        <option>Curicó</option>
-        <option value="otra">Otra…</option>
-      </select>
-      <input type="text" id="domicilioCiudadOtra" placeholder="Escribe tu ciudad" style="display:none;margin-top:8px;">
+      <select id="domicilioCiudad" required></select>
+      <input type="text" id="domicilioCiudadOtra" placeholder="Escribe tu ciudad" style="display:none;margin-top:8px;" required>
+      <label>Comuna</label>
+      <select id="domicilioComuna" required></select>
+      <input type="text" id="domicilioComunaOtra" placeholder="Escribe tu comuna" style="display:none;margin-top:8px;" required>
       <label>Depto / Block (opcional)</label>
       <input type="text" id="domicilioDepto" placeholder="Ej. Depto 302, Block C">
 
@@ -339,6 +259,72 @@ document.getElementById('domicilioComuna').addEventListener('change', function()
 document.getElementById('domicilioCiudad').addEventListener('change', function() {
   document.getElementById('domicilioCiudadOtra').style.display = this.value === 'otra' ? 'block' : 'none';
 });
+const REGIONES_COMUNAS = {
+  "Región de Aysén": { "Coyhaique": ["Coyhaique","Lago Verde"], "Aysén": ["Aysén","Cisnes","Guaitecas"], "Chile Chico": ["Chile Chico","Río Ibáñez"], "Cochrane": ["Cochrane","O'Higgins","Tortel"] },
+  "Región de Antofagasta": { "Antofagasta": ["Antofagasta","Mejillones","Sierra Gorda","Taltal"], "Calama": ["Calama","Ollagüe","San Pedro de Atacama"], "Tocopilla": ["Tocopilla","María Elena"] },
+  "Región de Arica y Parinacota": { "Arica": ["Arica","Camarones"], "Putre": ["Putre","General Lagos"] },
+  "Región de Atacama": { "Copiapó": ["Copiapó","Caldera","Tierra Amarilla"], "Vallenar": ["Vallenar","Alto del Carmen","Freirina","Huasco"], "Chañaral": ["Chañaral","Diego de Almagro"] },
+  "Región de Coquimbo": { "La Serena": ["La Serena","Coquimbo","Andacollo","La Higuera","Paiguano","Vicuña"], "Ovalle": ["Ovalle","Combarbalá","Monte Patria","Punitaqui","Río Hurtado"], "Illapel": ["Illapel","Canela","Los Vilos","Salamanca"] },
+  "Región de La Araucanía": { "Temuco": ["Temuco","Cholchol","Cunco","Curarrehue","Freire","Galvarino","Gorbea","Lautaro","Loncoche","Melipeuco","Nueva Imperial","Padre Las Casas","Perquenco","Pitrufquén","Pucón","Saavedra","Teodoro Schmidt","Toltén","Vilcún","Villarrica"], "Angol": ["Angol","Collipulli","Curacautín","Ercilla","Lonquimay","Los Sauces","Lumaco","Purén","Renaico","Traiguén","Victoria"] },
+  "Región de Los Lagos": { "Puerto Montt": ["Puerto Montt","Calbuco","Cochamó","Fresia","Frutillar","Llanquihue","Los Muermos","Maullín","Puerto Varas"], "Castro": ["Castro","Ancud","Chonchi","Curaco de Vélez","Dalcahue","Puqueldón","Queilén","Quellón","Quemchi"], "Osorno": ["Osorno","Puerto Octay","Purranque","Puyehue","Río Negro","San Juan de la Costa","San Pablo"], "Chaitén": ["Chaitén","Futaleufú","Hualaihué","Palena"] },
+  "Región de Los Ríos": { "Valdivia": ["Valdivia","Corral","Lanco","Los Lagos","Máfil","Mariquina","Paillaco","Panguipulli"], "La Unión": ["La Unión","Futrono","Lago Ranco","Río Bueno"] },
+  "Región de Magallanes y la Antártica Chilena": { "Punta Arenas": ["Punta Arenas","Laguna Blanca","Río Verde","San Gregorio"], "Puerto Natales": ["Natales","Torres del Paine"], "Porvenir": ["Porvenir","Primavera","Timaukel"], "Puerto Williams": ["Cabo de Hornos","Antártica"] },
+  "Región de Tarapacá": { "Iquique": ["Iquique","Alto Hospicio"], "Pozo Almonte": ["Pozo Almonte","Camiña","Colchane","Huara","Pica"] },
+  "Región de Valparaíso": { "Valparaíso": ["Valparaíso","Casablanca","Concón","Juan Fernández","Viña del Mar"], "Quillota": ["Quillota","Calera","Hijuelas","La Cruz","Nogales"], "San Antonio": ["San Antonio","Algarrobo","Cartagena","El Quisco","El Tabo","Santo Domingo"], "San Felipe": ["San Felipe","Catemu","Llaillay","Panquehue","Putaendo","Santa María"], "Los Andes": ["Los Andes","Calle Larga","Rinconada","San Esteban"], "Quilpué": ["Quilpué","Limache","Olmué","Villa Alemana"], "La Ligua": ["La Ligua","Cabildo","Papudo","Petorca","Zapallar"], "Isla de Pascua": ["Isla de Pascua"] },
+  "Región de Ñuble": { "Chillán": ["Chillán","Bulnes","Chillán Viejo","El Carmen","Pemuco","Pinto","Quillón","San Ignacio","Yungay"], "San Carlos": ["San Carlos","Coihueco","Ninhue","Ñiquén","Quirihue","Ránquil","San Fabián","San Nicolás","Treguaco"] },
+  "Región del Biobío": { "Concepción": ["Concepción","Chiguayante","Coronel","Florida","Hualqui","Lota","Penco","San Pedro de la Paz","Santa Juana","Talcahuano","Tomé"], "Los Ángeles": ["Los Ángeles","Antuco","Cabrero","Laja","Mulchén","Nacimiento","Negrete","Quilaco","Quilleco","San Rosendo","Santa Bárbara","Tucapel","Yumbel"], "Arauco": ["Arauco","Cañete","Contulmo","Curanilahue","Lebu","Los Álamos","Tirúa"] },
+  "Región del Libertador General Bernardo O'Higgins": { "Rancagua": ["Rancagua","Codegua","Coinco","Coltauco","Doñihue","Graneros","Las Cabras","Machalí","Malloa","Mostazal","Olivar","Peumo","Pichidegua","Quinta de Tilcoco","Rengo","Requínoa","San Vicente"], "Pichilemu": ["Pichilemu","La Estrella","Litueche","Marchihue","Navidad","Paredones"], "San Fernando": ["San Fernando","Chépica","Chimbarongo","Nancagua","Palmilla","Peralillo","Placilla","Pumanque","Santa Cruz"] },
+  "Región del Maule": { "Talca": ["Talca","Constitución","Curepto","Empedrado","Maule","Pelarco","Pencahue","Río Claro","San Clemente","San Rafael"], "Curicó": ["Curicó","Hualañé","Licantén","Molina","Rauco","Romeral","Sagrada Familia","Teno","Vichuquén"], "Linares": ["Linares","Colbún","Longaví","Parral","Retiro","San Javier","Villa Alegre","Yerbas Buenas"], "Cauquenes": ["Cauquenes","Chanco","Pelluhue"] },
+  "Región Metropolitana de Santiago": { "Santiago": ["Santiago","Cerrillos","Cerro Navia","Conchalí","El Bosque","Estación Central","Huechuraba","Independencia","La Cisterna","La Florida","La Granja","La Pintana","La Reina","Las Condes","Lo Barnechea","Lo Espejo","Lo Prado","Macul","Maipú","Ñuñoa","Pedro Aguirre Cerda","Peñalolén","Providencia","Pudahuel","Quilicura","Quinta Normal","Recoleta","Renca","San Joaquín","San Miguel","San Ramón","Vitacura"], "Puente Alto": ["Puente Alto","Pirque","San José de Maipo"], "San Bernardo": ["San Bernardo","Calera de Tango"], "Colina": ["Colina","Lampa","Tiltil"], "Melipilla": ["Melipilla","Alhué","Curacaví","María Pinto","San Pedro"], "Talagante": ["Talagante","El Monte","Isla de Maipo","Padre Hurtado","Peñaflor"] }
+};
+
+function poblarRegiones() {
+  const sel = document.getElementById('domicilioRegion');
+  const regiones = Object.keys(REGIONES_COMUNAS).sort((a,b) => a.localeCompare(b, 'es'));
+  sel.innerHTML = '<option value="">-- Selecciona --</option>' + regiones.map(r => `<option${r === 'Región Metropolitana de Santiago' ? ' selected' : ''}>${r}</option>`).join('');
+}
+function poblarCiudades(mantenerSeleccion) {
+  const region = document.getElementById('domicilioRegion').value;
+  const selCiudad = document.getElementById('domicilioCiudad');
+  const valorPrevio = mantenerSeleccion ? selCiudad.value : null;
+  if (!region || !REGIONES_COMUNAS[region]) {
+    selCiudad.innerHTML = '<option value="">-- Primero selecciona región --</option>';
+    poblarComunas();
+    return;
+  }
+  const ciudades = Object.keys(REGIONES_COMUNAS[region]).sort((a,b) => a.localeCompare(b, 'es'));
+  selCiudad.innerHTML = '<option value="">-- Selecciona --</option>' +
+    ciudades.map(c => `<option${c === valorPrevio || (!valorPrevio && c === 'Santiago' && region === 'Región Metropolitana de Santiago') ? ' selected' : ''}>${c}</option>`).join('') +
+    '<option value="otra">Otra…</option>';
+  poblarComunas();
+}
+function poblarComunas() {
+  const region = document.getElementById('domicilioRegion').value;
+  const ciudad = document.getElementById('domicilioCiudad').value;
+  const selComuna = document.getElementById('domicilioComuna');
+  document.getElementById('domicilioCiudadOtra').style.display = ciudad === 'otra' ? 'block' : 'none';
+  if (!ciudad) {
+    selComuna.innerHTML = '<option value="">-- Primero selecciona ciudad --</option>';
+    document.getElementById('domicilioComunaOtra').style.display = 'none';
+    return;
+  }
+  if (ciudad === 'otra') {
+    selComuna.innerHTML = '<option value="otra" selected>Otra…</option>';
+    document.getElementById('domicilioComunaOtra').style.display = 'block';
+    return;
+  }
+  const comunas = ((REGIONES_COMUNAS[region] || {})[ciudad] || []).slice().sort((a,b) => a.localeCompare(b, 'es'));
+  selComuna.innerHTML = '<option value="">-- Selecciona --</option>' + comunas.map(c => `<option>${c}</option>`).join('') + '<option value="otra">Otra…</option>';
+  document.getElementById('domicilioComunaOtra').style.display = 'none';
+}
+document.getElementById('domicilioRegion').addEventListener('change', () => poblarCiudades(false));
+document.getElementById('domicilioCiudad').addEventListener('change', poblarComunas);
+document.getElementById('domicilioComuna').addEventListener('change', function() {
+  document.getElementById('domicilioComunaOtra').style.display = this.value === 'otra' ? 'block' : 'none';
+});
+poblarRegiones();
+poblarCiudades(false);
+
 function valorConOtra(idSelect, idOtra) {
   const sel = document.getElementById(idSelect).value;
   if (sel === 'otra') return document.getElementById(idOtra).value.trim();
