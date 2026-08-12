@@ -103,6 +103,9 @@
     <input type="email" id="gateEmail" autocomplete="username">
     <label>Contraseña</label>
     <input type="password" id="gatePass" autocomplete="current-password">
+    <label style="display:flex;align-items:center;gap:8px;margin-top:14px;font-size:12.5px;color:#8a7a68;">
+      <input type="checkbox" id="gateRecordar" style="width:auto;margin:0;"> Recordar mis datos
+    </label>
     <button class="btn" id="gateBtn">Entrar</button>
     <div class="gate-err" id="gateErr"></div>
   </div>
@@ -202,6 +205,14 @@ if (sesionGuardada) {
     .catch(() => { sessionStorage.removeItem("ct_sesion"); });
 }
 
+// "Recordar mis datos" solo precarga correo/clave en el formulario, no mantiene la sesion iniciada.
+const credencialesGuardadas = JSON.parse(localStorage.getItem("ct_credenciales") || "null");
+if (credencialesGuardadas) {
+  document.getElementById("gateEmail").value = credencialesGuardadas.email || "";
+  document.getElementById("gatePass").value = credencialesGuardadas.password || "";
+  document.getElementById("gateRecordar").checked = true;
+}
+
 async function intentarEntrar() {
   const email = document.getElementById("gateEmail").value.trim();
   const pass = document.getElementById("gatePass").value;
@@ -218,6 +229,11 @@ async function intentarEntrar() {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error_description || data.msg || "Error de acceso");
     sessionStorage.setItem("ct_sesion", JSON.stringify({ access_token: data.access_token, refresh_token: data.refresh_token }));
+    if (document.getElementById("gateRecordar").checked) {
+      localStorage.setItem("ct_credenciales", JSON.stringify({ email, password: pass }));
+    } else {
+      localStorage.removeItem("ct_credenciales");
+    }
     await entrarConSesion({ access_token: data.access_token, refresh_token: data.refresh_token, user: data.user });
   } catch (e) {
     document.getElementById("gateErr").textContent = "Correo o contraseña incorrectos.";
@@ -249,10 +265,30 @@ async function cargarPendientes() {
     data.pendientes.forEach(p => {
       const div = document.createElement("div");
       div.className = "card-pend";
+      div.style.position = "relative";
       div.innerHTML = `<div class="nom">${p.nombre} ${p.apellido}</div>
-        <div class="det">RUT ${p.rut || "—"} · ${p.domicilio_comuna || "sin comuna"}</div>`;
-      div.addEventListener("click", () => abrirFormulario(p));
+        <div class="det">RUT ${p.rut || "—"} · ${p.domicilio_comuna || "sin comuna"}</div>
+        <button type="button" class="btnCancelarLista" data-id="${p.id}" data-nombre="${(p.nombre + " " + p.apellido).replace(/"/g,'&quot;')}" style="position:absolute;top:10px;right:10px;background:#fff;border:1px solid #e0453c;color:#c0392b;border-radius:6px;width:26px;height:26px;font-size:13px;cursor:pointer;line-height:1;">✕</button>`;
+      div.addEventListener("click", (e) => { if (!e.target.classList.contains("btnCancelarLista")) abrirFormulario(p); });
       lista.appendChild(div);
+    });
+    lista.querySelectorAll(".btnCancelarLista").forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        if (!confirm(`¿Cancelar la ficha de ${btn.dataset.nombre}? Esto la descarta y no se generará contrato.`)) return;
+        try {
+          const res = await fetch(COMPLETAR_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id: btn.dataset.id, access_token: SESION.access_token, accion: "cancelar" })
+          });
+          const data = await res.json();
+          if (!data.ok) throw new Error(data.error || "error");
+          cargarPendientes();
+        } catch (err) {
+          alert("No se pudo cancelar. Intenta de nuevo.");
+        }
+      });
     });
   } catch (e) {
     lista.innerHTML = '<div class="vacio">No se pudo cargar la lista. Intenta de nuevo.</div>';
@@ -275,8 +311,15 @@ function abrirFormulario(p) {
   document.getElementById("listaWrap").style.display = "none";
   document.getElementById("formWrap").style.display = "block";
   document.getElementById("formMsg").textContent = "";
+  const domicilio = [p.domicilio_calle, p.domicilio_num, p.domicilio_depto].filter(Boolean).join(" ") +
+    (p.domicilio_comuna ? (", " + p.domicilio_comuna) : "") + (p.domicilio_ciudad ? (", " + p.domicilio_ciudad) : "");
   document.getElementById("contexto").innerHTML =
-    `Completando contrato de <b>${p.nombre} ${p.apellido}</b><br>RUT ${p.rut || "—"} · ${p.email || "sin correo"} · ${p.telefono ? "+"+p.telefono : "sin teléfono"}`;
+    `<b>Completando contrato de ${p.nombre} ${p.apellido}</b><br>
+     RUT ${p.rut || "—"} · ${p.email || "sin correo"} · ${p.telefono ? "+"+p.telefono : "sin teléfono"}<br>
+     ${p.nacionalidad || "sin nacionalidad"} · ${p.fecha_nacimiento || "sin fecha de nacimiento"} · ${p.estado_civil || "sin estado civil"}<br>
+     🏠 ${domicilio || "sin domicilio"}<br>
+     🏦 AFP ${p.afp || "sin definir"} · ${p.sistema_salud || "sin definir"}${p.plan_isapre_uf ? (" (" + p.plan_isapre_uf + " UF)") : ""}<br>
+     💳 ${p.banco || "sin banco"} · ${p.tipo_cuenta || ""} ${p.numero_cuenta ? ("· N° " + p.numero_cuenta) : ""}`;
   document.getElementById("cFechaInicio").value = "";
   renderTurnoGrid();
 }
