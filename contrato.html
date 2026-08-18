@@ -81,7 +81,7 @@
   table.turno { width: 100%; font-size: 11px; border-collapse: collapse; margin-top: 8px; }
   table.turno th { padding: 4px; font-weight: 600; color: #8a7a68; }
   table.turno td { padding: 3px; text-align: center; }
-  table.turno input[type=text] { width: 54px; font-size: 11px; padding: 4px; text-align: center; }
+  table.turno input[type=text], table.turno input[type=time] { width: 74px; font-size: 11px; padding: 4px; text-align: center; }
   .nota-turno { font-size: 10.5px; color: #8a7a68; margin-top: 6px; }
 
   #gate { padding: 30px 26px; }
@@ -318,10 +318,10 @@ function renderTurnoGrid() {
   const wrap = document.getElementById("turnoGrid");
   wrap.innerHTML = '<table class="turno"><tr><th></th>' + DIAS_C.map(d=>`<th>${d}</th>`).join('') + '</tr>' +
     '<tr><td>Activo</td>' + DIAS_C.map((_,i)=>`<td><input type="checkbox" class="tOn" data-i="${i}"></td>`).join('') + '</tr>' +
-    '<tr><td>Entrada</td>' + DIAS_C.map((_,i)=>`<td><input type="text" class="tE" data-i="${i}" placeholder="09:00"></td>`).join('') + '</tr>' +
-    '<tr><td>Inicio col.</td>' + DIAS_C.map((_,i)=>`<td><input type="text" class="tColIni" data-i="${i}" placeholder="12:00"></td>`).join('') + '</tr>' +
-    '<tr><td>Fin col.</td>' + DIAS_C.map((_,i)=>`<td><input type="text" class="tColFin" data-i="${i}" placeholder="13:00"></td>`).join('') + '</tr>' +
-    '<tr><td>Salida</td>' + DIAS_C.map((_,i)=>`<td><input type="text" class="tS" data-i="${i}" placeholder="18:00"></td>`).join('') + '</tr></table>';
+    '<tr><td>Entrada</td>' + DIAS_C.map((_,i)=>`<td><input type="time" class="tE" data-i="${i}"></td>`).join('') + '</tr>' +
+    '<tr><td>Inicio col.</td>' + DIAS_C.map((_,i)=>`<td><input type="time" class="tColIni" data-i="${i}"></td>`).join('') + '</tr>' +
+    '<tr><td>Fin col.</td>' + DIAS_C.map((_,i)=>`<td><input type="time" class="tColFin" data-i="${i}"></td>`).join('') + '</tr>' +
+    '<tr><td>Salida</td>' + DIAS_C.map((_,i)=>`<td><input type="time" class="tS" data-i="${i}"></td>`).join('') + '</tr></table>';
 }
 
 function abrirFormulario(p) {
