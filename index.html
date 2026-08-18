@@ -188,13 +188,13 @@
       <label>Número de cuenta</label>
       <input type="text" id="numeroCuenta">
 
-      <div class="section-label">Documentos (opcional, puedes subirlos después)</div>
+      <div class="section-label">Documentos (obligatorio)</div>
       <label>Certificado AFP (PDF o foto)</label>
-      <input type="file" id="fileAfp" accept="application/pdf,image/*">
+      <input type="file" id="fileAfp" accept="application/pdf,image/*" required>
       <label>Certificado Fonasa / Isapre (PDF o foto)</label>
-      <input type="file" id="fileSalud" accept="application/pdf,image/*">
+      <input type="file" id="fileSalud" accept="application/pdf,image/*" required>
       <label>Certificado de antecedentes (PDF o foto)</label>
-      <input type="file" id="fileAntecedentes" accept="application/pdf,image/*">
+      <input type="file" id="fileAntecedentes" accept="application/pdf,image/*" required>
 
       <button type="submit" id="btn">Enviar ficha</button>
       <div class="msg" id="msg"></div>
@@ -369,8 +369,11 @@ document.getElementById('form').addEventListener('submit', async function(e) {
   if (!rutValido(rut)) { document.getElementById('errRut').textContent = 'RUT inválido, revisa el dígito verificador'; valido = false; }
   if (!correoValido(email)) { document.getElementById('errCorreo').textContent = 'Ingresa un correo válido'; valido = false; }
   if (telefono.length < 8) { document.getElementById('errTelefono').textContent = 'Teléfono incompleto'; valido = false; }
+  if (!document.getElementById('fileAfp').files[0] || !document.getElementById('fileSalud').files[0] || !document.getElementById('fileAntecedentes').files[0]) {
+    valido = false;
+  }
   if (!valido) {
-    msg.textContent = 'Revisa los datos marcados en rojo.';
+    msg.textContent = 'Revisa los datos marcados en rojo y adjunta los 3 documentos (AFP, Fonasa/Isapre y antecedentes son obligatorios).';
     msg.className = 'msg err';
     return;
   }
