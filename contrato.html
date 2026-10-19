@@ -137,7 +137,7 @@
       </div>
       <div>
         <label>Sueldo base</label>
-        <input type="number" id="cSueldo" value="539000">
+        <input type="number" id="cSueldo" value="553553">
       </div>
     </div>
     <div class="nota-turno" style="margin-top:-6px;margin-bottom:14px;">El sueldo se ingresa para 42 hrs (jornada completa). Si cambias las horas, se recalcula proporcionalmente — puedes editarlo igual a mano.</div>
@@ -192,7 +192,7 @@ const DIAS_C = ["Lun","Mar","Mie","Jue","Vie","Sab","Dom"];
 
 let SESION = null;
 let PENDIENTE_ACTUAL = null;
-let SUELDO_BASE_42 = 539000; // sueldo de jornada completa; se prorratea para 30/20 hrs
+let SUELDO_BASE_42 = 553553; // sueldo de jornada completa; se prorratea para 30/20 hrs
 
 async function cargarPerfil(userId, accessToken) {
   const res = await fetch(SUPABASE_URL + "/rest/v1/perfiles_dashboard?id=eq." + userId + "&select=*", {
